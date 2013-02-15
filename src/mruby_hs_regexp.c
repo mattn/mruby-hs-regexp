@@ -37,8 +37,7 @@ hs_regexp_init(mrb_state *mrb, mrb_value self, mrb_value str)
         DATA_TYPE(self) = &mrb_hs_regexp_type;
         reg = (struct mrb_hs_regexp *)DATA_PTR(self);
     }else{
-        Data_Get_Struct(mrb, self, &mrb_hs_regexp_type, reg);
-        mrb_free(mrb, reg->reg);
+        reg = (struct mrb_hs_regexp *)DATA_PTR(self);
     }
 
     reg->reg = regcomp(mrb, RSTRING_PTR(str));
@@ -121,7 +120,7 @@ hs_regexp_match(mrb_state *mrb, mrb_value self)
 
     mrb_get_args(mrb, "z", &str);
 
-    Data_Get_Struct(mrb, self, &mrb_hs_regexp_type, reg);
+    reg = (struct mrb_hs_regexp *)DATA_PTR(self);
     if (!reg->reg){
         mrb_raise(mrb, E_ARGUMENT_ERROR, "HsRegexp is not initialized.");
     }
